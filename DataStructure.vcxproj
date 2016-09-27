@@ -97,10 +97,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="MaxSubset.cpp" />
+    <ClCompile Include="DataStructure/MaxSubset.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="MaxSubset.h" />
+    <ClInclude Include="DataStructure/MaxSubset.h" />
+    <ClInclude Include="DataStructure\MaxSubsetResult.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

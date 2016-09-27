@@ -1,4 +1,6 @@
 #pragma once
+#ifndef __MAXSUBSET_H
+#define __MAXSUBSET_H
 
 #include<vector>
 
@@ -28,3 +30,7 @@ long MaxSubSet(const std::vector<int> & NumberArray)
 
     return MaxSum;
 }
+
+
+
+#endif
