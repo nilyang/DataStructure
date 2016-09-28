@@ -3,6 +3,9 @@
 
 #include<iostream>
 #include<vector>
+#include<queue>
+#include<deque>
+
 
 /*
 在MaxSubset基础上，返回子列首尾元素，空格分隔
@@ -136,30 +139,62 @@ negative:
     }
 }
 
-// O(N)算法简化
+//--------------------------//
+
+// O(N) 算法简化版
+// 核心依然是求开始位置，另外需要对最大子列和做历史记录，
+// 只记录最大的那个，相同子列和只记录第一个
+
+struct TempInfo{
+    long maxSum;
+    int indexBegin;
+    int indexEnd;
+    TempInfo(long max, int start, int end)
+        :maxSum(max), indexBegin(start), indexEnd(end)
+    {
+    }
+};
+
 Result MaxSubSum(const std::vector<int>& numArray)
 {
-    long currSum = 0, maxSum = 0, finalSum = 0;
+    std::vector<TempInfo> maxSumQueue;//记录子列和及子列首尾数
+    std::vector<TempInfo>::iterator iterSQ;//用于取顶部数据项
+    
+    long currSum = 0, maxSum = 0;
     int currBeginIdx = 0, currEndIdx = 0;
     int maxBeginIdx = 0, maxEndIdx = 0;
-
+    
     int i, K = numArray.size();
     int isNegative = 1;
     for (i = 0; i < K; i++) {
-        
+
+        //当前子列和
         currSum += numArray[i];
         
+        //是否全负数判定
         isNegative = isNegative && (numArray[i] < 0 ? 1 : 0);
-
+    
         if (currSum<0){
-            currSum = 0;
-            currBeginIdx = i + 1;
-            currEndIdx = currBeginIdx;//开始位置
+            currSum = 0;// 当前子列和小于0时，丢弃当前子列和
+
+            currEndIdx = currBeginIdx= i + 1; //起始位置移动到下一个位置
+
+            continue;
         }
 
         if (currSum > maxSum) {
             maxSum = currSum;
             maxEndIdx = currEndIdx = i;//结束位置
+            maxBeginIdx = currBeginIdx;//起始位置
+
+            // 最大子列和历史记录
+            iterSQ = maxSumQueue.begin();
+            if (maxSumQueue.size() == 0 || iterSQ[maxSumQueue.size()-1].maxSum < maxSum) {
+                if (maxSumQueue.size() > 0) {
+                    maxSumQueue.pop_back();
+                }
+                maxSumQueue.push_back(TempInfo(maxSum, maxBeginIdx, maxEndIdx));
+            }
         }
     }
 
@@ -168,6 +203,13 @@ Result MaxSubSum(const std::vector<int>& numArray)
         maxSum = 0; 
         maxBeginIdx = 0;
         maxEndIdx =  K - 1;
+    }
+
+    if (maxSumQueue.size() > 0) {
+        TempInfo maxRet = maxSumQueue.back();
+        maxSum = maxRet.maxSum;
+        maxBeginIdx = maxRet.indexBegin;
+        maxEndIdx = maxRet.indexEnd;
     }
 
     return Result(maxSum, numArray[maxBeginIdx], numArray[maxEndIdx]);
