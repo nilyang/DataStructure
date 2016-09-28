@@ -32,7 +32,7 @@ struct Result {
     long maxSum;
     int firstNum;
     int lastNum;
-    Result(long max = 0, int first = 0, int last = 0) 
+    Result(long max = 0, int first = 0, int last = 0)
         : maxSum(max), firstNum(first), lastNum(last)
     {
     }
@@ -44,18 +44,18 @@ Result MaxSubsetResult(const std::vector<int>& NumberArray)
 {
     std::vector<Result> vRes;
     Result res, preResult, finalResult;
-    
-    long maxSum = 0, currSum = 0, findMax = 0, isNegative=1;
+
+    long maxSum = 0, currSum = 0, findMax = 0, isNegative = 1;
     int idx_begin = 0, idx_end = 0;//index number
     int i, K = NumberArray.size();// K <= 10000
 
     maxSum = 0;
     // 全部负数判定
     for (i = 0; i < K; i++) {
-        isNegative = NumberArray[i] < 0 && isNegative; 
+        isNegative = NumberArray[i] < 0 && isNegative;
     }
 
-    if (isNegative) 
+    if (isNegative)
         goto negative;
 
     for (i = 0; i < K; i++) {
@@ -82,9 +82,9 @@ Result MaxSubsetResult(const std::vector<int>& NumberArray)
             maxSum = currSum;
             idx_end = i;
             findMax++;//找到目前最大子列和
-            //std::cout << "idx_end = "<< idx_end <<  ", findMax = " << findMax << std::endl;
+                      //std::cout << "idx_end = "<< idx_end <<  ", findMax = " << findMax << std::endl;
 
-            //记录子列信息
+                      //记录子列信息
             idx_begin = (idx_end + 1) - findMax;
             res.firstNum = NumberArray[idx_begin];
             res.lastNum = NumberArray[idx_end];
@@ -94,7 +94,7 @@ Result MaxSubsetResult(const std::vector<int>& NumberArray)
                 preResult = res;
                 //std::cout << "preResult.maxSum="<< preResult.maxSum <<", idx_end = " << idx_end << std::endl;
             }
-            
+
             if (vRes.size() > 0) {
                 if (vRes[vRes.size() - 1].maxSum < preResult.maxSum) {
                     vRes.pop_back();
@@ -116,12 +116,12 @@ Result MaxSubsetResult(const std::vector<int>& NumberArray)
 negative:
         res.maxSum = 0;
         res.firstNum = NumberArray[0];
-        res.lastNum = NumberArray[K -1];
+        res.lastNum = NumberArray[K - 1];
         return res;
     }
-    else if(vRes.size() > 0) {
+    else if (vRes.size() > 0) {
         for (int j = 0, vlen = vRes.size(); j < vlen; j++) {
-            if (j+1 < vlen && vRes[j].maxSum > vRes[j + 1].maxSum) {
+            if (j + 1 < vlen && vRes[j].maxSum > vRes[j + 1].maxSum) {
                 finalResult = vRes[j + 1];
             }
             else {
@@ -136,29 +136,40 @@ negative:
     }
 }
 
-// 改进版
+// O(N)算法简化
 Result MaxSubSum(const std::vector<int>& numArray)
 {
-    long currSum = 0, maxSum = 0;
+    long currSum = 0, maxSum = 0, finalSum = 0;
     int currBeginIdx = 0, currEndIdx = 0;
     int maxBeginIdx = 0, maxEndIdx = 0;
 
-    int i,j,len = numArray.size();
-    for(i = 0; i < len; i++){
+    int i, K = numArray.size();
+    int isNegative = 1;
+    for (i = 0; i < K; i++) {
+        
         currSum += numArray[i];
+        
+        isNegative = isNegative && (numArray[i] < 0 ? 1 : 0);
+
         if (currSum<0){
             currSum = 0;
             currBeginIdx = i + 1;
-            currEndIdx = currBeginIdx;
+            currEndIdx = currBeginIdx;//开始位置
         }
 
         if (currSum > maxSum) {
             maxSum = currSum;
-            maxEndIdx = i;
-            currEndIdx = i;
+            maxEndIdx = currEndIdx = i;//结束位置
         }
     }
 
-    return ;
+    //负数情况
+    if (isNegative) {
+        maxSum = 0; 
+        maxBeginIdx = 0;
+        maxEndIdx =  K - 1;
+    }
+
+    return Result(maxSum, numArray[maxBeginIdx], numArray[maxEndIdx]);
 }
 #endif
