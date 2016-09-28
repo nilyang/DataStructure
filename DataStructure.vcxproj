@@ -98,10 +98,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DataStructure/MaxSubset.cpp" />
+    <ClCompile Include="DataStructure\MaxSubsetResult.cpp" />
+    <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure/MaxSubset.h" />
     <ClInclude Include="DataStructure\MaxSubsetResult.h" />
+    <ClInclude Include="DataStructure\SingleList.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
