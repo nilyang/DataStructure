@@ -3,8 +3,6 @@
 
 #include<iostream>
 #include<vector>
-#include<queue>
-#include<deque>
 
 
 /*
@@ -149,17 +147,77 @@ struct TempInfo{
     long maxSum;
     int indexBegin;
     int indexEnd;
-    TempInfo(long max, int start, int end)
+    TempInfo(long max=0, int start=0, int end=0)
         :maxSum(max), indexBegin(start), indexEnd(end)
     {
     }
 };
 
-Result MaxSubSum(const std::vector<int>& numArray)
+// 使用vector记录历史子列和
+Result MaxSubSumUseVector(const std::vector<int>& numArray)
 {
     std::vector<TempInfo> maxSumQueue;//记录子列和及子列首尾数
     std::vector<TempInfo>::iterator iterSQ;//用于取顶部数据项
-    
+
+    long currSum = 0, maxSum = 0, finalSum = 0, preSum = 0;
+    int currBeginIdx = 0, currEndIdx = 0;
+    int maxBeginIdx = 0, maxEndIdx = 0;
+
+    int i, K = numArray.size();
+    int isNegative = 1;
+    for (i = 0; i < K; i++) {
+        //上一子列总和
+        preSum = currSum;
+
+        //当前子列和
+        currSum += numArray[i];
+
+        //是否全负数判定
+        isNegative = isNegative && (numArray[i] < 0 ? 1 : 0);
+
+        if (currSum<0) {
+            currSum = 0;// 当前子列和小于0时，丢弃当前子列和
+
+            currEndIdx = currBeginIdx = i + 1; //起始位置移动到下一个位置
+
+            continue;
+        }
+
+        if (currSum >= maxSum) {
+            maxSum = currSum;
+            maxEndIdx = currEndIdx = i;//结束位置
+            maxBeginIdx = currBeginIdx;//起始位置
+            iterSQ = maxSumQueue.begin();
+            if (maxSumQueue.size() == 0 || iterSQ[maxSumQueue.size() - 1].maxSum < maxSum) {
+                if (maxSumQueue.size() > 0) {
+                    maxSumQueue.pop_back();
+                }
+                maxSumQueue.push_back(TempInfo(maxSum, maxBeginIdx, maxEndIdx));
+            }
+        }
+    }
+
+    //负数情况
+    if (isNegative) {
+        maxSum = 0;
+        maxBeginIdx = 0;
+        maxEndIdx = K - 1;
+    }
+
+    else if (maxSumQueue.size() > 0) {
+        TempInfo maxRet = maxSumQueue.back();
+        maxSum = maxRet.maxSum;
+        maxBeginIdx = maxRet.indexBegin;
+        maxEndIdx = maxRet.indexEnd;
+    }
+
+    return Result(maxSum, numArray[maxBeginIdx], numArray[maxEndIdx]);
+}
+
+// 不使用vector记录历史子列和，仅用一个对象记录最大子列和信息
+Result MaxSubSumNoVector(const std::vector<int>& numArray)
+{
+    TempInfo maxResult; //记录历史，仅仅记录最大的那个
     long currSum = 0, maxSum = 0;
     int currBeginIdx = 0, currEndIdx = 0;
     int maxBeginIdx = 0, maxEndIdx = 0;
@@ -182,18 +240,16 @@ Result MaxSubSum(const std::vector<int>& numArray)
             continue;
         }
 
-        if (currSum > maxSum) {
+        if (currSum >= maxSum) {
             maxSum = currSum;
             maxEndIdx = currEndIdx = i;//结束位置
             maxBeginIdx = currBeginIdx;//起始位置
 
-            // 最大子列和历史记录
-            iterSQ = maxSumQueue.begin();
-            if (maxSumQueue.size() == 0 || iterSQ[maxSumQueue.size()-1].maxSum < maxSum) {
-                if (maxSumQueue.size() > 0) {
-                    maxSumQueue.pop_back();
-                }
-                maxSumQueue.push_back(TempInfo(maxSum, maxBeginIdx, maxEndIdx));
+            // 最大子列和历史记录(包括最大和以及首尾索引)
+            if (maxResult.maxSum < maxSum) {
+                maxResult.maxSum = maxSum;
+                maxResult.indexBegin = maxBeginIdx;
+                maxResult.indexEnd = maxEndIdx;
             }
         }
     }
@@ -205,13 +261,14 @@ Result MaxSubSum(const std::vector<int>& numArray)
         maxEndIdx =  K - 1;
     }
 
-    if (maxSumQueue.size() > 0) {
-        TempInfo maxRet = maxSumQueue.back();
-        maxSum = maxRet.maxSum;
-        maxBeginIdx = maxRet.indexBegin;
-        maxEndIdx = maxRet.indexEnd;
+    // 当最子列数超过1个的时候，仅记录最大的子列
+    else if (maxResult.maxSum > 0) {
+        maxSum = maxResult.maxSum;
+        maxBeginIdx = maxResult.indexBegin;
+        maxEndIdx = maxResult.indexEnd;
     }
 
     return Result(maxSum, numArray[maxBeginIdx], numArray[maxEndIdx]);
 }
+
 #endif
