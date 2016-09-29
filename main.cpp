@@ -1,10 +1,29 @@
 #define MY_CASE 0
 #if MY_CASE == 0
 
-#include"DataStructure\SingleList.h"
+#include"DataStructure\List.h"
+
+#include<iostream>
 
 int main()
 {
+    PList list = MakeEmpty();
+    std::cout << list->Last << std::endl;
+    Insert(list, 1);
+    Insert(list, 2);
+    Insert(list, 3);
+    Insert(list, 4);
+    Insert(list, 5);
+    Insert(list, 6);
+    std::cout << list->Last << std::endl;
+    Insert(list, 13, 5);
+    std::cout << list->Last << std::endl;
+
+    for (int i = 0; i <= list->Last; i++) {
+        std::cout << list->Data[i] << " ";
+    }
+    std::cout << "\n";
+    system("pause");
     return 0;
 }
 
