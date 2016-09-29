@@ -98,12 +98,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DataStructure/MaxSubset.cpp" />
+    <ClCompile Include="DataStructure\LinkedList.cpp" />
     <ClCompile Include="DataStructure\List.cpp" />
     <ClCompile Include="DataStructure\MaxSubsetResult.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DataStructure/MaxSubset.h" />
+    <ClInclude Include="DataStructure\LinkedList.h" />
     <ClInclude Include="DataStructure\List.h" />
     <ClInclude Include="DataStructure\MaxSubsetResult.h" />
     <ClInclude Include="DataStructure\SingleList.h" />

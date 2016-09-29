@@ -1,5 +1,18 @@
-#define MY_CASE 0
-#if MY_CASE == 0
+#define MY_CASE 2
+
+#if MY_CASE == 2
+#include"DataStructure\LinkedList.h"
+#include<iostream>
+
+int main()
+{
+    LinkedList<int> list = MakeEmptyList<int>();
+
+    system("pause");
+    return 0;
+}
+
+#elif MY_CASE == 1
 
 #include"DataStructure\List.h"
 
@@ -15,10 +28,10 @@ int main()
     Insert(list, 4);
     Insert(list, 5);
     Insert(list, 6);
-    std::cout << list->Last << std::endl;
+    std::cout << list->Last+1 << std::endl;
     Insert(list, 13, 5);
-    std::cout << list->Last << std::endl;
-
+    Delete(list, 2);
+    std::cout << list->Last+1 << std::endl;
     for (int i = 0; i <= list->Last; i++) {
         std::cout << list->Data[i] << " ";
     }
@@ -27,7 +40,7 @@ int main()
     return 0;
 }
 
-#elif MY_CASE == 1
+#elif MY_CASE == 0
 
     #define TEST_CASE 1
 
