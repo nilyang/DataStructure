@@ -1,14 +1,35 @@
 #define MY_CASE 2
 
-#if MY_CASE == 2
-#include"DataStructure\LinkedList.h"
+
+#if MY_CASE == 0
+
+
+#elif MY_CASE == 2
+
 #include<iostream>
+
+#include"DataStructure\LinkedList.h"
 
 int main()
 {
-    LinkedList<int> list = MakeEmptyList<int>();
+    ListHead<int> *L = MakeEmptyList<int>();
+
+    Insert(L, 13);
+    Insert(L, 23);
+    Insert(L, 34);
+    Insert(L, 45);
+    Insert(L, 56);
+    
+    ListHead<int> *tmp = L->next;
+    for (; tmp != nullptr; tmp = tmp->next) {
+        std::cout << tmp->Data << " ";
+    }
+    std::cout << "\n";
+
+    DestroyList<int>(L);
 
     system("pause");
+
     return 0;
 }
 

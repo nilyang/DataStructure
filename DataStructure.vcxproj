@@ -109,6 +109,7 @@
     <ClInclude Include="DataStructure\List.h" />
     <ClInclude Include="DataStructure\MaxSubsetResult.h" />
     <ClInclude Include="DataStructure\SingleList.h" />
+    <ClInclude Include="TemplateUsage\TemplateUsage.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="README.md" />
